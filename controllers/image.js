@@ -1,4 +1,5 @@
-const {ClarifaiStub, grpc} = require("clarifai-nodejs-grpc");
+// const {ClarifaiStub, grpc} = require("clarifai-nodejs-grpc");
+import {ClarifaiStub, grpc} from "clarifai-nodejs-grpc";
 
 const stub = ClarifaiStub.grpc();
 
