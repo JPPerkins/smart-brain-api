@@ -1,20 +1,20 @@
-import {ClarifaiStub, grpc} from "clarifai-nodejs-grpc";
+import {ClarifaiStub, grpc} from 'clarifai-nodejs-grpc';
 
 const stub = ClarifaiStub.grpc();
 
 const metadata = new grpc.Metadata();
-metadata.set("authorization", "Key " + process.env.API_CLARIFAI);
+metadata.set('authorization', 'Key ' + process.env.API_CLARIFAI);
 
 const handleApiCall = (req, res) => {
 	stub.PostModelOutputs(
 		{
-			model_id: "face-detection",
+			model_id: 'face-detection',
 			inputs: [{data: {image: {url: req.body.input}}}]
 		},
 		metadata,
         (err, response) => {
             if (err) {
-                console.error("Error:", err);
+                console.error('Error.');
                 return res.status(500).json('Internal Server Error');
             }
 
@@ -23,7 +23,7 @@ const handleApiCall = (req, res) => {
                 return res.status(400).json('Failed to process image');
             }
 
-            console.log("Predicted concepts, with confidence values:");
+            console.log('Predicted concepts, with confidence values:');
             for (const c of response.outputs[0].data.concepts) {
                 console.log(`${c.name}: ${c.value}`);
             }
@@ -43,7 +43,7 @@ const handleImage = (req, res, db) => {
 			res.json(entries[0].entries);
 		})
         .catch(err => {
-            console.error('Error getting entries:', err);
+            console.error('Error getting entries.');
             res.status(500).json('Internal Server Error');
         });
 };
