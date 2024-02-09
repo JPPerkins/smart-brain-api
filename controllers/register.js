@@ -21,15 +21,26 @@ const handleRegister = (req, res, db, bcrypt) => {
 					email: loginEmail[0].email,
 					name: name,
 					joined: new Date()
-			})
-			.then(user => {
-				res.json(user[0]);
-			})
+				})
+				.then(user => {
+					res.json(user[0]);
+				})
+				.catch(err => {
+					console.error('Error inserting user.');
+					res.status(500).json('Internal Server Error');
+				});
 		})
 		.then(trx.commit)
-		.catch(trx.rollback);
+		.catch(err => {
+			console.error('Error committing transaction.');
+			trx.rollback();
+			res.status(500).json('Internal Server Error');
+		});
 	})
-	.catch(err => res.status(400).json("Unable To Register"));
+	.catch(err => {
+        console.error('Error starting transaction:', err);
+        res.status(500).json('Internal Server Error');
+    });
 };
 
 export default handleRegister;

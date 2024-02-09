@@ -1,4 +1,5 @@
-import express, { json } from 'express';
+import express from 'express';
+import { json } from 'express';
 import bcrypt from 'bcrypt-nodejs';
 import cors from 'cors';
 import knex from 'knex';
@@ -22,24 +23,32 @@ const db = knex({
 });
 
 const app = express();
-app.use(json());
 
+app.use(json());
 app.use(cors());
 
-app.get('/', (req, res) => {res.send('success')});
+app.post('/signin', (req, res) => {
+    handleSignIn(req, res, db, bcrypt);
+});
 
-app.post('/signin', (req, res) => { handleSignIn(req, res, db, bcrypt)});
+app.post('/register', (req, res) => {
+    handleRegister(req, res, db, bcrypt);
+});
 
-app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt)});
+app.get('/profile/:id', (req, res) => {
+    handleProfileGet(req, res, db);
+});
 
-app.get('/profile/:id', (req, res) => { handleProfileGet(req, res, db)});
+app.put('/image', (req, res) => {
+    handleImage(req, res, db);
+});
 
-app.put('/image', (req, res) => { handleImage(req, res, db)});
-
-app.post('/imageurl', (req, res) => { handleApiCall(req, res)})
+app.post('/imageurl', (req, res) => {
+    handleApiCall(req, res);
+});
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-	console.log('app is running on... ' + port);
+    console.log('App is running on port ' + port);
 });
